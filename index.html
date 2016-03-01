@@ -1,0 +1,447 @@
+<!-- saved from url=(0013)about:internet -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link rel="stylesheet" type="text/css" href="style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jaafariSoldier</title>
+<script language="JavaScript" type="text/javascript">
+<!--
+//v1.7
+// Flash Player Version Detection
+// Detect Client Browser type
+// Copyright 2005-2008 Adobe Systems Incorporated.  All rights reserved.
+var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
+var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
+var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
+function ControlVersion()
+{
+	var version;
+	var axo;
+	var e;
+	// NOTE : new ActiveXObject(strFoo) throws an exception if strFoo isn't in the registry
+	try {
+		// version will be set for 7.X or greater players
+		axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
+		version = axo.GetVariable("$version");
+	} catch (e) {
+	}
+	if (!version)
+	{
+		try {
+			// version will be set for 6.X players only
+			axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.6");
+			
+			// installed player is some revision of 6.0
+			// GetVariable("$version") crashes for versions 6.0.22 through 6.0.29,
+			// so we have to be careful. 
+			
+			// default to the first public version
+			version = "WIN 6,0,21,0";
+			// throws if AllowScripAccess does not exist (introduced in 6.0r47)		
+			axo.AllowScriptAccess = "always";
+			// safe to call for 6.0r47 or greater
+			version = axo.GetVariable("$version");
+		} catch (e) {
+		}
+	}
+	if (!version)
+	{
+		try {
+			// version will be set for 4.X or 5.X player
+			axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.3");
+			version = axo.GetVariable("$version");
+		} catch (e) {
+		}
+	}
+	if (!version)
+	{
+		try {
+			// version will be set for 3.X player
+			axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.3");
+			version = "WIN 3,0,18,0";
+		} catch (e) {
+		}
+	}
+	if (!version)
+	{
+		try {
+			// version will be set for 2.X player
+			axo = new ActiveXObject("ShockwaveFlash.ShockwaveFlash");
+			version = "WIN 2,0,0,11";
+		} catch (e) {
+			version = -1;
+		}
+	}
+	
+	return version;
+}
+// JavaScript helper required to detect Flash Player PlugIn version information
+function GetSwfVer(){
+	// NS/Opera version >= 3 check for Flash plugin in plugin array
+	var flashVer = -1;
+	
+	if (navigator.plugins != null && navigator.plugins.length > 0) {
+		if (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]) {
+			var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
+			var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
+			var descArray = flashDescription.split(" ");
+			var tempArrayMajor = descArray[2].split(".");			
+			var versionMajor = tempArrayMajor[0];
+			var versionMinor = tempArrayMajor[1];
+			var versionRevision = descArray[3];
+			if (versionRevision == "") {
+				versionRevision = descArray[4];
+			}
+			if (versionRevision[0] == "d") {
+				versionRevision = versionRevision.substring(1);
+			} else if (versionRevision[0] == "r") {
+				versionRevision = versionRevision.substring(1);
+				if (versionRevision.indexOf("d") > 0) {
+					versionRevision = versionRevision.substring(0, versionRevision.indexOf("d"));
+				}
+			}
+			var flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
+		}
+	}
+	// MSN/WebTV 2.6 supports Flash 4
+	else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;
+	// WebTV 2.5 supports Flash 3
+	else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
+	// older WebTV supports Flash 2
+	else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
+	else if ( isIE && isWin && !isOpera ) {
+		flashVer = ControlVersion();
+	}	
+	return flashVer;
+}
+// When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
+function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
+{
+	versionStr = GetSwfVer();
+	if (versionStr == -1 ) {
+		return false;
+	} else if (versionStr != 0) {
+		if(isIE && isWin && !isOpera) {
+			// Given "WIN 2,0,0,11"
+			tempArray         = versionStr.split(" "); 	// ["WIN", "2,0,0,11"]
+			tempString        = tempArray[1];			// "2,0,0,11"
+			versionArray      = tempString.split(",");	// ['2', '0', '0', '11']
+		} else {
+			versionArray      = versionStr.split(".");
+		}
+		var versionMajor      = versionArray[0];
+		var versionMinor      = versionArray[1];
+		var versionRevision   = versionArray[2];
+        	// is the major.revision >= requested major.revision AND the minor version >= requested minor
+		if (versionMajor > parseFloat(reqMajorVer)) {
+			return true;
+		} else if (versionMajor == parseFloat(reqMajorVer)) {
+			if (versionMinor > parseFloat(reqMinorVer))
+				return true;
+			else if (versionMinor == parseFloat(reqMinorVer)) {
+				if (versionRevision >= parseFloat(reqRevision))
+					return true;
+			}
+		}
+		return false;
+	}
+}
+function AC_AddExtension(src, ext)
+{
+  if (src.indexOf('?') != -1)
+    return src.replace(/\?/, ext+'?'); 
+  else
+    return src + ext;
+}
+function AC_Generateobj(objAttrs, params, embedAttrs) 
+{ 
+  var str = '';
+  if (isIE && isWin && !isOpera)
+  {
+    str += '<object ';
+    for (var i in objAttrs)
+    {
+      str += i + '="' + objAttrs[i] + '" ';
+    }
+    str += '>';
+    for (var i in params)
+    {
+      str += '<param name="' + i + '" value="' + params[i] + '" /> ';
+    }
+    str += '</object>';
+  }
+  else
+  {
+    str += '<embed ';
+    for (var i in embedAttrs)
+    {
+      str += i + '="' + embedAttrs[i] + '" ';
+    }
+    str += '> </embed>';
+  }
+  document.write(str);
+}
+function AC_FL_RunContent(){
+  var ret = 
+    AC_GetArgs
+    (  arguments, ".swf", "movie", "clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+     , "application/x-shockwave-flash"
+    );
+  AC_Generateobj(ret.objAttrs, ret.params, ret.embedAttrs);
+}
+function AC_SW_RunContent(){
+  var ret = 
+    AC_GetArgs
+    (  arguments, ".dcr", "src", "clsid:166B1BCA-3F9C-11CF-8075-444553540000"
+     , null
+    );
+  AC_Generateobj(ret.objAttrs, ret.params, ret.embedAttrs);
+}
+function AC_GetArgs(args, ext, srcParamName, classid, mimeType){
+  var ret = new Object();
+  ret.embedAttrs = new Object();
+  ret.params = new Object();
+  ret.objAttrs = new Object();
+  for (var i=0; i < args.length; i=i+2){
+    var currArg = args[i].toLowerCase();    
+    switch (currArg){	
+      case "classid":
+        break;
+      case "pluginspage":
+        ret.embedAttrs[args[i]] = args[i+1];
+        break;
+      case "src":
+      case "movie":	
+        args[i+1] = AC_AddExtension(args[i+1], ext);
+        ret.embedAttrs["src"] = args[i+1];
+        ret.params[srcParamName] = args[i+1];
+        break;
+      case "onafterupdate":
+      case "onbeforeupdate":
+      case "onblur":
+      case "oncellchange":
+      case "onclick":
+      case "ondblclick":
+      case "ondrag":
+      case "ondragend":
+      case "ondragenter":
+      case "ondragleave":
+      case "ondragover":
+      case "ondrop":
+      case "onfinish":
+      case "onfocus":
+      case "onhelp":
+      case "onmousedown":
+      case "onmouseup":
+      case "onmouseover":
+      case "onmousemove":
+      case "onmouseout":
+      case "onkeypress":
+      case "onkeydown":
+      case "onkeyup":
+      case "onload":
+      case "onlosecapture":
+      case "onpropertychange":
+      case "onreadystatechange":
+      case "onrowsdelete":
+      case "onrowenter":
+      case "onrowexit":
+      case "onrowsinserted":
+      case "onstart":
+      case "onscroll":
+      case "onbeforeeditfocus":
+      case "onactivate":
+      case "onbeforedeactivate":
+      case "ondeactivate":
+      case "type":
+      case "codebase":
+      case "id":
+        ret.objAttrs[args[i]] = args[i+1];
+        break;
+      case "width":
+      case "height":
+      case "align":
+      case "vspace": 
+      case "hspace":
+      case "class":
+      case "title":
+      case "accesskey":
+      case "name":
+      case "tabindex":
+        ret.embedAttrs[args[i]] = ret.objAttrs[args[i]] = args[i+1];
+        break;
+      default:
+        ret.embedAttrs[args[i]] = ret.params[args[i]] = args[i+1];
+    }
+  }
+  ret.objAttrs["classid"] = classid;
+  if (mimeType) ret.embedAttrs["type"] = mimeType;
+  return ret;
+}
+// -->
+</script>
+<script language="JavaScript" type="text/javascript">
+<!--
+// -----------------------------------------------------------------------------
+// Globals
+// Major version of Flash required
+var requiredMajorVersion = 10;
+// Minor version of Flash required
+var requiredMinorVersion = 0;
+// Revision of Flash required
+var requiredRevision = 2;
+// -----------------------------------------------------------------------------
+// -->
+</script>
+</head>
+<body>
+<div class="title">
+	<h1> The Sex War</h1>
+	<h2> How injured troops are battling infertility and intimacy after battling abroad</h2>
+</div>
+<div class="lede">
+	<p> <b> Feb. 3, 2012 was a normal day for Staff Sgt. Timothy Brown. </b> He spent the better part of the day outside of Fallujah, a small town in Northern Iraq, searching for improvised explosive devices, or IEDs. </p>
+</div>
+
+ <p>His job — he was apart of an Explosive Ordnance Disposal company — was to find and disarm them. </p>
+
+ <p>The job of EOD companies is complex. Everyone on the team has to go through seven months of extended schooling on how to find and disarm bombs ranging from pipe bombs to nuclear war heads. It’s not necessarily rocket science, but ask what a bomb is made of and Brown can immediately list off its anatomy. </p>
+
+ <p>“It requires an engineering mind,” he said, which is something he’s always had. He went to school for engineering at University of El Paso before leaving to join the Marines. </p>
+
+ <p>For most EOD members, the job creates close-knit teams who get great autonomy from commanding officers. They’re not snooty, but they’re not grunts — they’re the skilled Marines who have to figure out how troops can drive down a road and not get blown to bits. </p>
+
+ <p>That day in February, Brown was doing just that. His team was informed of IEDs surrounding an abandoned home. They would look for discolored dirt where the dry top layer would be disturbed and the cool, wet and dark soil would show. Nothing showed up that day. </p>
+
+ <p>After coming back from his search, Brown did what he normally did: he palled around with his company, got some chow and went to sleep.</p>
+
+ <p>And that’s all he remembers. </p>
+
+ <p>Ten days later, Brown woke up 6,000 miles away from his cot in Iraq at the Bethesda Medical Center outside of Washington D.C.</p>
+
+ <p>“I knew exactly what that meant. I knew something bad happened,” he said.</p>
+
+ <p>The next day, according to Brown’s company members, he had conducted two more IED searches that day and happened to step on one. The blast tore off both of his legs, right arm, mangles his left hand and shredded off both of his testicles and a large portion of tissue to his penis. </p>
+
+ <p>There are more than 51,000 troops who have been injured in the Iraq and Afghanistan wars through explosions and improvised explosive devices, or IEDs. Nearly TK percent of those injured end up walking away from their injuries in some form or another, but since 2003 over 1,200 soldiers have suffered such extreme genital injuries from explosives that it sometimes renders them incapable of having sex, or having a very limited amount of it.</p>
+
+ <p>Brown is one of many soldiers and Marines who say their injuries, at least some of them, could’ve been avoided if they were given proper gear or information.  Officials at the Pentagon and the military’s Program Executive Office Soldier have started working on new programs and technology that not only keeps U.S. troops safer, but also offers them sex therapy to help them figure out how best to maintain a relationship. </p>
+ <div class="divide">
+	///***///
+</div>
+<body bgcolor="#ffffff">
+<!--url's used in the movie-->
+<!--text used in the movie-->
+<script language="JavaScript" type="text/javascript">
+<!--
+var hasRightVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+if(hasRightVersion) {  // if we've detected an acceptable version
+	// embed the flash movie
+	AC_FL_RunContent(
+		'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,2,0',
+		'width', '100%',
+		'height', '500',
+		'src', 'jaafariSoldier',
+		'quality', 'high',
+		'pluginspage', 'http://www.adobe.com/go/getflashplayer',
+		'align', 'middle',
+		'play', 'false',
+		'loop', 'false',
+		'scale', 'noscale',
+		'wmode', 'window',
+		'devicefont', 'false',
+		'id', 'jaafariSoldier',
+		'bgcolor', '#ffffff',
+		'name', 'jaafariSoldier',
+		'menu', 'true',
+		'allowFullScreen', 'true',
+		'allowScriptAccess','sameDomain',
+		'movie', 'jaafariSoldier',
+		'salign', ''
+		); //end AC code
+} else {  // flash is too old or we can't detect the plugin
+	var alternateContent = '<p>This content requires version '
+		+ requiredMajorVersion + '.' + requiredMinorVersion + '.' + requiredRevision + ' '
+		+ 'or higher of the Adobe Flash Player.</p>'
+		+ '<a href="http://www.adobe.com/go/getflashplayer/">Get Flash</a>';
+	document.write(alternateContent);  // insert non-flash content
+}
+// -->
+</script>
+<noscript>
+  	This content requires the Adobe Flash Player.
+  	<a href="http://www.adobe.com/go/getflashplayer/">Get Flash</a>
+</noscript>
+<div class="divide">
+	///***///
+</div>
+<div class="lede">
+	<p><b>In 2012, the military began issuing a two-tiered protection system that would help protect against blasts and bullets called a pelvic protection system. </b>The gear was a silk boxer, similar in style to a pair of biking shorts, and a bulletproof Kevlar-like plate that was placed in front of the groin. </p>
+</div>
+
+<p>Research done by the Army Surgeon General’s office in 2013 found that soldiers who didn’t wear the gear — charmingly nicknamed by troops as “blast boxers” and “blast diapers” — were twice as likely to suffer from extreme genital urinary injuries. </p>
+
+<p>“Those soldiers who didn't have their gear on had suffered extensive injuries to the genital area, including loss of genital function. The best course of action is to strictly enforce warriors to wear their gear,” the report said. </p>
+
+<p>But some troops say the gear isn’t comfortable, and that it doesn’t really protect against blasts like the military says it does. </p>
+
+<p>“The plate is basically just a flap that hangs down in front. It doesn’t really help in the event of a blast, it’s more there in case you get shot,” said Sgt. First-Class Aaron Causey, another Marine with an EOD company who suffered amputations and genital injuries after stepping on an IED. “I was more worried about getting blown up.”</p>
+
+<p>Causey said the gear was cumbersome — especially the plate — and that in a situation where you need to crouch or maneuver your body in an awkward position, the plate would get in the way. So he never wore it.</p>
+
+<p>That’s not uncommon, says Sherrie Wilcox, a researcher at the University of Southern California’s Center for Innovation and Research on Veteran and Family Life. In a study lead by Wilcox, her team found that troops often didn’t wear their pelvic protection system because of comfort issues. </p>
+
+<p>“There's an alarming number of troops who just didn't feel liek wearing the gear,” said the report. </p>
+
+<p>The Army’s Program Executive Office, which helps in design and implementation of gear for deployed troops, said that the gear is currently being redesigned to be more comfortable. </p>
+
+<p>“We've heard the complaints and feedback from warriors,” said Lt. Col. Kathy M. Brown, a product manager who heads armor redesign with the PEO. </p>
+
+<p>The new undergarment will rise higher on the abdomen, which is good for women whose reproductive organs sit higher than men’s, and will no longer include the silk boxer. </p>
+
+<p>The new undergarment is expected to be tested within the next few months at training sites across the nation and TK said troops can expect the gear before deployment within the next year. </p>
+
+<p>But Brown also said it comes down to the responsibility of the troops and the officers directing them to wear their gear. </p>
+
+<p>“It's like motorcyclists who don't wear their helmets. The law said you should, but we see all the time people not wearing them for comfort reasons,” she said. “It's part culture and part disobedience.”</p>
+
+<div class="divide">
+	///***///
+</div>
+
+<div class="lede">
+<p><b>Brown was never given any kind of pelvic protection system, though. </b> In fact, the protective gear wasn’t even issued till a few months after his getting injured. </p>
+</div>
+
+<p>“I never got to wear the gear, which is unfortunate,” he said. </p>
+
+<p>At the time he was injured, Brown was 24 years old. He had never given a serious thought to having kids, and even though he knew the risks of him being injured an EOD team member, he didn’t think about banking his sperm. </p>
+
+<p><b>“PLACEHOLDER QUOTE” he said. </b> </p>
+
+<p>Currently, the Department of Defense’s policy is to advise soldiers that sperm and egg cryogenic freezing is a way to secure fertility options in the event of an injury, but the cost of freezing is left up to the soldiers. </p>
+
+<p><b> PLACEHOLDER FOR FROZEN EMBRYOS INTERVIEW AND BG</b> </p>
+
+<p>In Vitro Fertilization is an option that the military pays for, but the injured service member has to be married.</p>
+
+<p>Sgt. Causey, the other EOD Marine who suffered from testicular damage, and his wife Kat were able to utilize the military’s health benefits to go through fertilization treatment for IVF (though they ended up conceiving naturally). </p>
+
+<p>But Brown, even if he didn’t have both of his testicles ripped from him, would still be out of luck. “What about us single guys,” he said, laughing.</p>
+
+<p>In January this year, Sec. of Defense Ashton Carter announced that the Pentagon would be implementing a pilot program that would bank the sperm of troops before deployment. </p>
+
+<p>The Department of Defense allocated $150 million to the two-year pilot program, which can be renewed up to five times. The pilot is expected to start on Oct. 1 this year, though details haven’t been finalized. A spokesman with the department said details would be released hopefully within the first week of March. </p>
+<div class="divide">
+	///***///
+</div>
+<div class="lede">
+<p><b>PLACEHOLDER INFORMATION -- TK and To Be Cont'd</b></p>
+</div>
+<p>During recovery, Brown had over 80 surgeries and doctor visits — most of them urology visits — but getting back to normal would mean for him to try and navigate what his dating and sex life would be like. </p>
+
+<p>“It took me nearly two years to even work the courage up to talk to some one,” he said. “And then when I got them to the bedroom, I had to be honest with them and say ‘I don’t know how this works. I don’t know what’s going to happen.’ ” </p>
+
+
+</body>
+</html>
